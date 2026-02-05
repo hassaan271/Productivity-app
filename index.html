@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRODUCTIVITY COMMAND CENTER // SYSTEM ONLINE</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Fallback fonts while custom fonts load -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Exo+2:wght@700;900&family=Anton&display=swap"
+        rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker Registered'))
+                .catch((error) => console.log('Service Worker Registration Failed:', error));
+        }
+    </script>
+    <style>
+        :root {
+            --bg-primary: #0d0d0d;
+            --bg-secondary: #1a1a1a;
+            --bg-tertiary: #262626;
+            --accent-light: #404040;
+            --accent-medium: #595959;
+            --text-primary: #e0e0e0;
+            --text-secondary: #a0a0a0;
+            --text-tertiary: #707070;
+            --border-color: #333333;
+            --shadow-glow: 0 0 20px rgba(64, 64, 64, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Anton', 'Impact', sans-serif;
+            /* Maximum Impact style */
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Matte texture overlay */
+        /* Matte texture overlay - Enhanced with Noise */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.08'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.7;
+            mix-blend-mode: overlay;
+        }
+
+        /* Subtle matte grid background */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(rgba(64, 64, 64, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(64, 64, 64, 0.02) 1px, transparent 1px);
+            background-size: 60px 60px;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: 40px 20px 30px;
+            border-bottom: 2px solid var(--accent-medium);
+            margin-bottom: 40px;
+            background: linear-gradient(180deg, var(--bg-secondary) 0%, transparent 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            font-family: 'Azonix', 'Orbitron', 'Impact', sans-serif;
+            /* Azonix style */
+            font-size: clamp(2rem, 5vw, 4rem);
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow:
+                2px 2px 0px var(--accent-medium),
+                4px 4px 0px var(--accent-light),
+                6px 6px 8px rgba(0, 0, 0, 0.4);
+            letter-spacing: 6px;
+            margin-bottom: 10px;
+            /* constant glow instead of glitch */
+            animation: glow-pulse 3s infinite;
+        }
+
+        @keyframes glow-pulse {
+
+            0%,
+            100% {
+                text-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+            }
+
+            50% {
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            }
+        }
+
+        @keyframes glitch {
+
+            0%,
+            90%,
+            100% {
+                transform: translate(0);
+            }
+
+            92% {
+                transform: translate(-2px, 2px);
+            }
+
+            94% {
+                transform: translate(2px, -2px);
+            }
+
+            96% {
+                transform: translate(-1px, 1px);
+            }
+        }
+
+        .subtitle {
+            font-family: 'Exo 2', sans-serif;
+            /* Azonix style */
+            color: var(--accent-medium);
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .date-display {
+            font-family: 'Anton', 'Impact', sans-serif;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Navigation Tabs */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            font-family: 'Exo 2', sans-serif;
+            /* Azonix style */
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 12px 24px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .tab-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, var(--accent-medium), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .tab-btn:hover::before {
+            left: 100%;
+        }
+
+        .tab-btn:hover {
+            border-color: var(--accent-medium);
+            color: var(--text-primary);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .tab-btn.active {
+            background: var(--accent-medium);
+            color: #ffffff;
+            border-color: var(--accent-medium);
+            box-shadow: var(--shadow-glow);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Schedule Grid */
+        .schedule-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .schedule-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 20px;
+            align-items: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .schedule-item:hover {
+            border-color: var(--accent-medium);
+            box-shadow: 0 0 15px rgba(64, 64, 64, 0.3);
+            transform: translateX(5px);
+        }
+
+        .schedule-item.completed {
+            background: linear-gradient(90deg, rgba(89, 89, 89, 0.15) 0%, var(--bg-secondary) 100%);
+            border-left: 4px solid var(--accent-medium);
+        }
+
+        .time-block {
+            font-family: 'Anton', 'Impact', sans-serif;
+            color: var(--accent-medium);
+            font-weight: 700;
+            font-size: 1rem;
+            min-width: 140px;
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 5px;
+        }
+
+        .activity-type {
+            font-family: 'Exo 2', sans-serif;
+            /* Azonix style */
+            font-size: 0.8rem;
+            color: var(--accent-medium);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+        }
+
+        .activity-notes {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Custom Checkbox */
+        .checkbox-wrapper {
+            position: relative;
+        }
+
+        .checkbox {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--accent-medium);
+            background: transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox:hover {
+            box-shadow: 0 0 10px var(--accent-medium);
+        }
+
+        .checkbox.checked {
+            background: var(--accent-medium);
+        }
+
+        .checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffffff;
+            font-weight: 900;
+            font-size: 1.2rem;
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-medium), var(--accent-light));
+        }
+
+        .stat-label {
+            font-family: 'Exo 2', sans-serif;
+            /* Azonix style */
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-value {
+            font-family: 'Rubik Glitch', 'Impact', sans-serif;
+            /* Doctor Glitch style */
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .stat-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-top: 5px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            background: var(--bg-tertiary);
+            height: 30px;
+            border: 1px solid var(--border-color);
+            margin-top: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-medium), var(--accent-light));
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%);
+            }
+
+            100% {
+                transform: translateX(100%);
+            }
+        }
+
+        .progress-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Anton', 'Impact', sans-serif;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+            z-index: 2;
+        }
+
+        /* Pomodoro Timer Section */
+        .pomodoro-section {
+            background: var(--bg-secondary);
+            border: 2px solid var(--accent-medium);
+            padding: 40px;
+            text-align: center;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .timer-display {
+            font-family: 'Rubik Glitch', 'Impact', sans-serif;
+            /* Doctor Glitch style */
+            font-size: 5rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 3px 3px 0px var(--accent-medium), 5px 5px 8px rgba(0, 0, 0, 0.5);
+            margin: 20px 0;
+            letter-spacing: 8px;
+        }
+
+        .timer-controls {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            font-family: 'Exo 2', sans-serif;
+            /* Azonix style */
+            background: var(--bg-primary);
+            border: 2px solid var(--accent-medium);
+            color: var(--text-primary);
+            padding: 15px 30px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+        }
+
+        .btn:hover {
+            background: var(--accent-medium);
+            color: #ffffff;
+            box-shadow: var(--shadow-glow);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Goals Section */
+        .goals-grid {
+            display: grid;
+            gap: 20px;
+        }
+
+        .goal-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            padding: 25px;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .goal-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .goal-status {
+            font-family: 'Exo 2', sans-serif;
+            /* Azonix style */
+            padding: 5px 15px;
+            border: 1px solid var(--accent-medium);
+            color: var(--text-primary);
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .goal-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            font-family: 'Anton', 'Impact', sans-serif;
+            color: var(--text-secondary);
+        }
+
+        /* Reset Button */
+        .reset-section {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .btn-reset {
+            background: var(--bg-primary);
+            border: 2px solid var(--text-tertiary);
+            color: var(--text-tertiary);
+        }
+
+        .btn-reset:hover {
+            background: var(--text-tertiary);
+            color: #ffffff;
+            box-shadow: 0 0 20px rgba(112, 112, 112, 0.5);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .schedule-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+
+            .timer-display {
+                font-size: 3rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .loading-text {
+            font-family: 'Anton', 'Impact', sans-serif;
+            color: var(--accent-medium);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            50%,
+            100% {
+                opacity: 1;
+            }
+
+            25%,
+            75% {
+                opacity: 0.3;
+            }
+        }
+
+        /* 3D Graphics & Motion */
+        .header-3d-scene {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200px;
+            height: 200px;
+            transform: translate(-50%, -50%) perspective(600px);
+            z-index: -1;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .reactor-ring {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--accent-medium);
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: rotate3d 10s linear infinite;
+        }
+
+        .reactor-ring:nth-child(2) {
+            border-color: var(--accent-light);
+            width: 80%;
+            height: 80%;
+            top: 10%;
+            left: 10%;
+            animation: rotate3d-rev 7s linear infinite;
+        }
+
+        .reactor-ring:nth-child(3) {
+            border-color: var(--bg-tertiary);
+            border-width: 4px;
+            width: 60%;
+            height: 60%;
+            top: 20%;
+            left: 20%;
+            animation: rotate3d 15s linear infinite;
+        }
+
+        .reactor-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 20px var(--text-primary);
+            animation: pulse-core 2s ease-in-out infinite;
+        }
+
+        @keyframes rotate3d {
+            0% {
+                transform: rotateX(70deg) rotateY(0deg) rotateZ(0deg);
+            }
+
+            100% {
+                transform: rotateX(70deg) rotateY(360deg) rotateZ(360deg);
+            }
+        }
+
+        @keyframes rotate3d-rev {
+            0% {
+                transform: rotateX(-70deg) rotateY(0deg) rotateZ(0deg);
+            }
+
+            100% {
+                transform: rotateX(-70deg) rotateY(-360deg) rotateZ(-360deg);
+            }
+        }
+
+        @keyframes pulse-core {
+
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                box-shadow: 0 0 20px var(--text-primary);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.5);
+                box-shadow: 0 0 40px var(--text-primary);
+            }
+        }
+
+        /* 3D Tilt Class */
+        .tilt-card {
+            transform-style: preserve-3d;
+            transform: perspective(1000px);
+            transition: transform 0.1s ease-out;
+            /* Super fast for mouse tracking, slower for reset */
+        }
+
+        .tilt-card-inner {
+            transform: translateZ(20px);
+        }
+
+        /* Calendar Styles */
+        .calendar-container {
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-color);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-family: 'Azonix', 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .calendar-day-label {
+            text-align: center;
+            color: var(--accent-medium);
+            font-family: 'Exo 2', sans-serif;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 1px solid var(--border-color);
+            background: rgba(255, 255, 255, 0.02);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            padding: 5px;
+            font-family: 'Anton', sans-serif;
+            color: var(--text-secondary);
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            border-color: var(--accent-medium);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .calendar-day.active {
+            border-color: var(--accent-medium);
+            background: rgba(89, 89, 89, 0.1);
+        }
+
+        .calendar-day.has-data::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent-medium);
+            box-shadow: 0 0 5px var(--accent-medium);
+        }
+
+        .calendar-day.today {
+            border: 2px solid var(--text-primary);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="header-3d-scene">
+                <div class="reactor-ring"></div>
+                <div class="reactor-ring"></div>
+                <div class="reactor-ring"></div>
+                <div class="reactor-core"></div>
+            </div>
+            <h1>PRODUCTIVITY COMMAND CENTER</h1>
+            <div class="subtitle">SYSTEM STATUS: ONLINE</div>
+            <div class="date-display" id="currentDate"></div>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('today')">TODAY'S SCHEDULE</button>
+            <button class="tab-btn" onclick="switchTab('calendar')">CALENDAR</button>
+            <button class="tab-btn" onclick="switchTab('pomodoro')">POMODORO TIMER</button>
+            <button class="tab-btn" onclick="switchTab('stats')">STATISTICS</button>
+            <button class="tab-btn" onclick="switchTab('goals')">GOALS</button>
+        </div>
+
+        <!-- TODAY'S SCHEDULE TAB -->
+        <div id="today" class="tab-content active">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Sessions Completed</div>
+                    <div class="stat-value" id="todayCompleted">0</div>
+                    <div class="stat-subtitle">/ 19 Total Sessions</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="todayProgress" style="width: 0%"></div>
+                        <div class="progress-text" id="todayProgressText">0%</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Pomodoros Today</div>
+                    <div class="stat-value" id="pomodorosToday">0</div>
+                    <div class="stat-subtitle">/ 5 Target</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Deep Work Time</div>
+                    <div class="stat-value" id="deepWorkTime">0</div>
+                    <div class="stat-subtitle">Hours of Focus</div>
+                </div>
+            </div>
+
+            <div class="schedule-grid" id="scheduleContainer"></div>
+        </div>
+
+        <!-- POMODORO TIMER TAB -->
+        <div id="pomodoro" class="tab-content">
+            <div class="pomodoro-section">
+                <div class="stat-label">FOCUS SESSION TIMER</div>
+                <div class="timer-display" id="timerDisplay">25:00</div>
+                <div class="timer-controls">
+                    <button class="btn" id="startBtn" onclick="startTimer()">START</button>
+                    <button class="btn" id="pauseBtn" onclick="pauseTimer()" disabled>PAUSE</button>
+                    <button class="btn" id="resetBtn" onclick="resetTimer()">RESET</button>
+                </div>
+                <div style="margin-top: 30px;">
+                    <div class="stat-label">SESSION TYPE</div>
+                    <div class="timer-controls">
+                        <button class="btn" onclick="setTimer(25)">POMODORO (25m)</button>
+                        <button class="btn" onclick="setTimer(5)">SHORT BREAK (5m)</button>
+                        <button class="btn" onclick="setTimer(10)">LONG BREAK (10m)</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Pomodoros</div>
+                    <div class="stat-value" id="totalPomodoros">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">This Week</div>
+                    <div class="stat-value" id="weekPomodoros">0</div>
+                    <div class="stat-subtitle">/ 25 Target</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Streak</div>
+                    <div class="stat-value" id="streakDays">0</div>
+                    <div class="stat-subtitle">Days</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- STATISTICS TAB -->
+        <div id="stats" class="tab-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Weekly Completion</div>
+                    <div class="stat-value" id="weeklyCompletion">0%</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="weeklyProgress" style="width: 0%"></div>
+                        <div class="progress-text" id="weeklyProgressText">0%</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Python Sessions</div>
+                    <div class="stat-value" id="pythonSessions">0</div>
+                    <div class="stat-subtitle">/ 15 Weekly Goal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">MCP Dev Sessions</div>
+                    <div class="stat-value" id="mcpSessions">0</div>
+                    <div class="stat-subtitle">/ 10 Weekly Goal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Content Created</div>
+                    <div class="stat-value" id="contentSessions">0</div>
+                    <div class="stat-subtitle">/ 5 Weekly Goal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Workouts</div>
+                    <div class="stat-value" id="workoutSessions">0</div>
+                    <div class="stat-subtitle">/ 5 Weekly Goal</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Current Streak</div>
+                    <div class="stat-value" id="currentStreak">0</div>
+                    <div class="stat-subtitle">Days Active</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- GOALS TAB -->
+        <div id="goals" class="tab-content">
+            <div class="goals-grid">
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-title">🐍 Python Learning</div>
+                        <div class="goal-status" id="pythonStatus">TRACKING</div>
+                    </div>
+                    <div>60 Pomodoros (15/week × 4)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="pythonProgress" style="width: 0%"></div>
+                        <div class="progress-text" id="pythonProgressText">0%</div>
+                    </div>
+                    <div class="goal-progress">
+                        <span>Progress: <span id="pythonCurrent">0</span> / 60</span>
+                        <span>Weekly: <span id="pythonWeekly">0</span> / 15</span>
+                    </div>
+                </div>
+
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-title">🔧 MCP Server Development</div>
+                        <div class="goal-status" id="mcpStatus">TRACKING</div>
+                    </div>
+                    <div>40 Pomodoros (10/week × 4)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="mcpProgress" style="width: 0%"></div>
+                        <div class="progress-text" id="mcpProgressText">0%</div>
+                    </div>
+                    <div class="goal-progress">
+                        <span>Progress: <span id="mcpCurrent">0</span> / 40</span>
+                        <span>Weekly: <span id="mcpWeekly">0</span> / 10</span>
+                    </div>
+                </div>
+
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-title">📱 Content Creation</div>
+                        <div class="goal-status" id="contentStatus">TRACKING</div>
+                    </div>
+                    <div>20 Hours (5/week × 4)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="contentProgress" style="width: 0%"></div>
+                        <div class="progress-text" id="contentProgressText">0%</div>
+                    </div>
+                    <div class="goal-progress">
+                        <span>Progress: <span id="contentCurrent">0</span> / 20</span>
+                        <span>Weekly: <span id="contentWeekly">0</span> / 5</span>
+                    </div>
+                </div>
+
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-title">💪 Calisthenics</div>
+                        <div class="goal-status" id="workoutStatus">TRACKING</div>
+                    </div>
+                    <div>20 Workouts (5/week × 4)</div>
+                    <div class="progress-container">
+                        <div class="progress-bar" id="workoutProgress" style="width: 0%"></div>
+                        <div class="progress-text" id="workoutProgressText">0%</div>
+                    </div>
+                    <div class="goal-progress">
+                        <span>Progress: <span id="workoutCurrent">0</span> / 20</span>
+                        <span>Weekly: <span id="workoutWeekly">0</span> / 5</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- CALENDAR TAB -->
+        <div id="calendar" class="tab-content">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <button class="btn" style="padding: 5px 15px;" onclick="changeMonth(-1)">
+                        << /button>
+                            <span id="calendarTitle">MONTH YEAR</span>
+                            <button class="btn" style="padding: 5px 15px;" onclick="changeMonth(1)">></button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Grid generated by JS -->
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Active Days</div>
+                    <div class="stat-value" id="totalActiveDays">0</div>
+                    <div class="stat-subtitle">Total Tracked</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Consistency</div>
+                    <div class="stat-value" id="consistencyScore">0%</div>
+                    <div class="stat-subtitle">This Month</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESET SECTION -->
+        <div class="reset-section">
+            <button class="btn btn-reset" onclick="resetAllData()">RESET ALL DATA</button>
+            <div style="margin-top: 10px; color: var(--text-secondary); font-size: 0.9rem;">
+                Warning: This will clear all progress and cannot be undone
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Schedule data
+        const scheduleData = [
+            { time: '9:00-9:05', activity: 'Day Planning & Setup', type: 'SETUP', notes: 'Review priorities, prepare workspace', category: 'planning' },
+            { time: '9:05-9:30', activity: 'Python Learning (P1)', type: 'DEEP WORK', notes: '25 min focused - NO distractions', category: 'python' },
+            { time: '9:30-9:35', activity: 'Break', type: 'REST', notes: 'Stretch, water, quick walk', category: 'break' },
+            { time: '9:35-10:00', activity: 'Python Learning (P2)', type: 'DEEP WORK', notes: 'Hands-on coding practice', category: 'python' },
+            { time: '10:00-10:05', activity: 'Break', type: 'REST', notes: 'Eye rest, hydration', category: 'break' },
+            { time: '10:05-10:30', activity: 'Python Learning (P3)', type: 'DEEP WORK', notes: 'Build mini-projects', category: 'python' },
+            { time: '10:30-10:40', activity: 'Extended Break', type: 'REST', notes: 'Longer break after 3 Pomodoros', category: 'break' },
+            { time: '10:40-11:05', activity: 'MCP Server Dev (P1)', type: 'DEEP WORK', notes: 'Work on custom MCP server', category: 'mcp' },
+            { time: '11:05-11:10', activity: 'Break', type: 'REST', notes: 'Quick mental reset', category: 'break' },
+            { time: '11:10-11:35', activity: 'MCP Server Dev (P2)', type: 'DEEP WORK', notes: 'Continue implementation', category: 'mcp' },
+            { time: '11:35-11:40', activity: 'Break', type: 'REST', notes: 'Prepare for lunch', category: 'break' },
+            { time: '11:40-12:00', activity: 'Finish Project MCP', type: 'PROJECT', notes: 'Wrap up ongoing MCP projects', category: 'mcp' },
+            { time: '12:00-1:00', activity: 'LUNCH BREAK', type: 'MEAL', notes: 'Eat away from desk - mental reset', category: 'meal' },
+            { time: '1:00-2:00', activity: 'Content Creation', type: 'CREATIVE', notes: 'Plan/create social media content', category: 'content' },
+            { time: '2:00-2:30', activity: 'Video Upload', type: 'SOCIAL', notes: 'Upload, optimize, schedule posts', category: 'content' },
+            { time: '2:30-3:00', activity: 'Project Work', type: 'PROJECT', notes: 'MCP testing, documentation', category: 'project' },
+            { time: '3:00-4:00', activity: 'CALISTHENICS', type: 'FITNESS', notes: 'Combat afternoon energy dip', category: 'workout' },
+            { time: '4:00-4:30', activity: 'Post-Workout', type: 'RECOVERY', notes: 'Shower, protein, light snack', category: 'recovery' },
+            { time: '4:30-5:00', activity: 'Light Tasks', type: 'ADMIN', notes: 'Email, planning, organize notes', category: 'admin' }
+        ];
+
+        // State management
+        let state = {
+            today: {},
+            totalPomodoros: 0,
+            weeklyData: {},
+            streak: 0,
+            lastActiveDate: null
+        };
+
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('productivityState');
+            if (saved) {
+                state = JSON.parse(saved);
+            }
+            updateStreak();
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            localStorage.setItem('productivityState', JSON.stringify(state));
+        }
+
+        // Initialize
+        function init() {
+            loadState();
+            displayDate();
+            renderSchedule();
+            updateAllStats();
+            renderCalendar();
+            setInterval(displayDate, 1000);
+        }
+
+        // Display current date
+        function displayDate() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent =
+                `SYSTEM TIME: ${now.toLocaleDateString('en-US', options)} // ${now.toLocaleTimeString('en-US')}`;
+        }
+
+        // Get today's key
+        function getTodayKey() {
+            const today = new Date();
+            return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+        }
+
+        // Update streak
+        function updateStreak() {
+            const today = getTodayKey();
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayKey = `${yesterday.getFullYear()}-${String(yesterday.getMonth() + 1).padStart(2, '0')}-${String(yesterday.getDate()).padStart(2, '0')}`;
+
+            if (state.lastActiveDate === today) {
+                // Already active today
+                return;
+            } else if (state.lastActiveDate === yesterdayKey) {
+                // Continued streak
+                state.streak++;
+                state.lastActiveDate = today;
+            } else if (!state.lastActiveDate) {
+                // First time
+                state.streak = 1;
+                state.lastActiveDate = today;
+            } else {
+                // Streak broken
+                state.streak = 1;
+                state.lastActiveDate = today;
+            }
+            saveState();
+        }
+
+        // Render schedule
+        function renderSchedule() {
+            const container = document.getElementById('scheduleContainer');
+            const todayKey = getTodayKey();
+
+            if (!state.today[todayKey]) {
+                state.today[todayKey] = {};
+            }
+
+            container.innerHTML = scheduleData.map((item, index) => {
+                const isCompleted = state.today[todayKey][index] || false;
+                return `
+                    <div class="schedule-item ${isCompleted ? 'completed' : ''}" id="schedule-${index}">
+                        <div class="time-block">${item.time}</div>
+                        <div class="activity-info">
+                            <div class="activity-name">${item.activity}</div>
+                            <div class="activity-type">${item.type}</div>
+                            <div class="activity-notes">${item.notes}</div>
+                        </div>
+                        <div class="checkbox-wrapper">
+                            <div class="checkbox ${isCompleted ? 'checked' : ''}" onclick="toggleTask(${index})"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            updateAllStats();
+        }
+
+        // Toggle task completion
+        function toggleTask(index) {
+            const todayKey = getTodayKey();
+
+            if (!state.today[todayKey]) {
+                state.today[todayKey] = {};
+            }
+
+            state.today[todayKey][index] = !state.today[todayKey][index];
+
+            // Count pomodoro if it's a deep work session
+            const item = scheduleData[index];
+            if (item.type === 'DEEP WORK' && state.today[todayKey][index]) {
+                state.totalPomodoros++;
+                updateStreak();
+            } else if (item.type === 'DEEP WORK' && !state.today[todayKey][index]) {
+                state.totalPomodoros = Math.max(0, state.totalPomodoros - 1);
+            }
+
+            saveState();
+            renderSchedule();
+        }
+
+        // Update all statistics
+        function updateAllStats() {
+            const todayKey = getTodayKey();
+            const todayData = state.today[todayKey] || {};
+
+            // Today's stats
+            const completedToday = Object.values(todayData).filter(v => v).length;
+            const totalSessions = scheduleData.length;
+            const progressPercent = Math.round((completedToday / totalSessions) * 100);
+
+            document.getElementById('todayCompleted').textContent = completedToday;
+            document.getElementById('todayProgress').style.width = progressPercent + '%';
+            document.getElementById('todayProgressText').textContent = progressPercent + '%';
+
+            // Pomodoros today
+            const pomodorosToday = scheduleData.filter((item, i) =>
+                item.type === 'DEEP WORK' && todayData[i]
+            ).length;
+            document.getElementById('pomodorosToday').textContent = pomodorosToday;
+
+            // Deep work hours (each pomodoro is 25min)
+            const deepWorkHours = (pomodorosToday * 25 / 60).toFixed(1);
+            document.getElementById('deepWorkTime').textContent = deepWorkHours;
+
+            // Total pomodoros
+            document.getElementById('totalPomodoros').textContent = state.totalPomodoros;
+
+            // Weekly stats
+            const weekStart = getWeekStart();
+            let weeklyPomodoros = 0;
+            let pythonWeekly = 0;
+            let mcpWeekly = 0;
+            let contentWeekly = 0;
+            let workoutWeekly = 0;
+
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(weekStart);
+                date.setDate(date.getDate() + i);
+                const dateKey = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+                if (state.today[dateKey]) {
+                    scheduleData.forEach((item, idx) => {
+                        if (state.today[dateKey][idx]) {
+                            if (item.type === 'DEEP WORK') weeklyPomodoros++;
+                            if (item.category === 'python') pythonWeekly++;
+                            if (item.category === 'mcp') mcpWeekly++;
+                            if (item.category === 'content') contentWeekly++;
+                            if (item.category === 'workout') workoutWeekly++;
+                        }
+                    });
+                }
+            }
+
+            document.getElementById('weekPomodoros').textContent = weeklyPomodoros;
+            document.getElementById('streakDays').textContent = state.streak;
+
+            // Weekly completion
+            const weeklyCompletion = Math.round((weeklyPomodoros / 25) * 100);
+            document.getElementById('weeklyCompletion').textContent = weeklyCompletion + '%';
+            document.getElementById('weeklyProgress').style.width = weeklyCompletion + '%';
+            document.getElementById('weeklyProgressText').textContent = weeklyCompletion + '%';
+
+            // Category stats
+            document.getElementById('pythonSessions').textContent = pythonWeekly;
+            document.getElementById('mcpSessions').textContent = mcpWeekly;
+            document.getElementById('contentSessions').textContent = contentWeekly;
+            document.getElementById('workoutSessions').textContent = workoutWeekly;
+            document.getElementById('currentStreak').textContent = state.streak;
+
+            // Goals progress
+            updateGoalsProgress(pythonWeekly, mcpWeekly, contentWeekly, workoutWeekly);
+        }
+
+        // 3D Tilt Effect and Smooth Motions
+        let isAnimating = false;
+        let mouseX = 0;
+        let mouseY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+
+            if (!isAnimating && window.innerWidth > 768) {
+                window.requestAnimationFrame(updateTilt);
+                isAnimating = true;
+            }
+        });
+
+        function updateTilt() {
+            const cards = document.querySelectorAll('.stat-card, .schedule-item, .pomodoro-section');
+
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+
+                // Calculate distance to center of card
+                const centerX = rect.left + rect.width / 2;
+                const centerY = rect.top + rect.height / 2;
+                const distX = mouseX - centerX;
+                const distY = mouseY - centerY;
+
+                // Only animate if within a reasonable distance (e.g., 300px) to save performance
+                // and avoid distracting movement on far away elements
+                const distance = Math.sqrt(distX * distX + distY * distY);
+                const activationRange = 400;
+
+                if (distance < activationRange) {
+                    // Calculate intensity based on distance (closer = stronger)
+                    const intensity = 1 - (distance / activationRange);
+
+                    const rotateX = ((mouseY - centerY) / (activationRange / 2)) * -5 * intensity;
+                    const rotateY = ((mouseX - centerX) / (activationRange / 2)) * 5 * intensity;
+
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                    card.style.zIndex = '10';
+                    // Dynamic shadow based on light source direction
+                    card.style.boxShadow = `${-rotateY * 3}px ${rotateX * 3}px 20px rgba(0,0,0,${0.3 + (intensity * 0.2)})`;
+                } else {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                    card.style.zIndex = '1';
+                    card.style.boxShadow = 'none';
+                }
+            });
+
+            isAnimating = false;
+        }
+
+        // Add staggered entrance animation
+        function animateEntrance() {
+            const elements = document.querySelectorAll('.schedule-item, .stat-card, .goal-item');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                el.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+
+                setTimeout(() => {
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 50); // 50ms stagger
+            });
+        }
+
+        // Hook entrance animation to tab switches and init
+        const originalSwitchTab = switchTab;
+        switchTab = function (tabName) {
+            originalSwitchTab(tabName);
+            setTimeout(animateEntrance, 50);
+        };
+
+        // Initialize with animation
+        const originalInit = init;
+        init = function () {
+            originalInit();
+            // Override init to include animation
+            setTimeout(animateEntrance, 100);
+        };
+
+        // Update goals progress
+        function updateGoalsProgress(python, mcp, content, workout) {
+            // Python (60 total, 15 weekly)
+            const pythonPercent = Math.round((python / 15) * 100);
+            document.getElementById('pythonProgress').style.width = pythonPercent + '%';
+            document.getElementById('pythonProgressText').textContent = pythonPercent + '%';
+            document.getElementById('pythonCurrent').textContent = python;
+            document.getElementById('pythonWeekly').textContent = python;
+            document.getElementById('pythonStatus').textContent =
+                pythonPercent >= 100 ? '✓ COMPLETE' : pythonPercent >= 75 ? '🟢 ON TRACK' : '🔴 BEHIND';
+
+            // MCP (40 total, 10 weekly)
+            const mcpPercent = Math.round((mcp / 10) * 100);
+            document.getElementById('mcpProgress').style.width = mcpPercent + '%';
+            document.getElementById('mcpProgressText').textContent = mcpPercent + '%';
+            document.getElementById('mcpCurrent').textContent = mcp;
+            document.getElementById('mcpWeekly').textContent = mcp;
+            document.getElementById('mcpStatus').textContent =
+                mcpPercent >= 100 ? '✓ COMPLETE' : mcpPercent >= 75 ? '🟢 ON TRACK' : '🔴 BEHIND';
+
+            // Content (20 total, 5 weekly)
+            const contentPercent = Math.round((content / 5) * 100);
+            document.getElementById('contentProgress').style.width = contentPercent + '%';
+            document.getElementById('contentProgressText').textContent = contentPercent + '%';
+            document.getElementById('contentCurrent').textContent = content;
+            document.getElementById('contentWeekly').textContent = content;
+            document.getElementById('contentStatus').textContent =
+                contentPercent >= 100 ? '✓ COMPLETE' : contentPercent >= 75 ? '🟢 ON TRACK' : '🔴 BEHIND';
+
+            // Workout (20 total, 5 weekly)
+            const workoutPercent = Math.round((workout / 5) * 100);
+            document.getElementById('workoutProgress').style.width = workoutPercent + '%';
+            document.getElementById('workoutProgressText').textContent = workoutPercent + '%';
+            document.getElementById('workoutCurrent').textContent = workout;
+            document.getElementById('workoutWeekly').textContent = workout;
+            document.getElementById('workoutStatus').textContent =
+                workoutPercent >= 100 ? '✓ COMPLETE' : workoutPercent >= 75 ? '🟢 ON TRACK' : '🔴 BEHIND';
+        }
+
+        // Get week start (Monday)
+        function getWeekStart() {
+            const today = new Date();
+            const day = today.getDay();
+            const diff = today.getDate() - day + (day === 0 ? -6 : 1);
+            return new Date(today.setDate(diff));
+        }
+
+        // Tab switching
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        // Pomodoro Timer
+        let timerInterval = null;
+        let timeRemaining = 25 * 60; // 25 minutes in seconds
+        let isRunning = false;
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('timerDisplay').textContent =
+                `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        function startTimer() {
+            if (!isRunning) {
+                isRunning = true;
+                document.getElementById('startBtn').disabled = true;
+                document.getElementById('pauseBtn').disabled = false;
+
+                timerInterval = setInterval(() => {
+                    if (timeRemaining > 0) {
+                        timeRemaining--;
+                        updateTimerDisplay();
+                    } else {
+                        pauseTimer();
+                        alert('🎉 Pomodoro Complete! Take a break.');
+                        state.totalPomodoros++;
+                        saveState();
+                        updateAllStats();
+                        resetTimer();
+                    }
+                }, 1000);
+            }
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('startBtn').disabled = false;
+            document.getElementById('pauseBtn').disabled = true;
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            timeRemaining = 25 * 60;
+            updateTimerDisplay();
+        }
+
+        function setTimer(minutes) {
+            pauseTimer();
+            timeRemaining = minutes * 60;
+            updateTimerDisplay();
+        }
+
+        // Reset all data
+        function resetAllData() {
+            if (confirm('Are you sure you want to reset ALL data? This cannot be undone!')) {
+                localStorage.removeItem('productivityState');
+                state = {
+                    today: {},
+                    totalPomodoros: 0,
+                    weeklyData: {},
+                    streak: 0,
+                    lastActiveDate: null
+                };
+                init();
+            }
+        }
+
+        // Calendar Logic
+        let currentCalendarDate = new Date();
+
+        function renderCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            const title = document.getElementById('calendarTitle');
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            title.textContent = new Date(year, month).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }).toUpperCase();
+
+            grid.innerHTML = '';
+
+            // Days labels
+            const days = ['SUN', 'MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT'];
+            days.forEach(day => {
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day-label';
+                dayEl.textContent = day;
+                grid.appendChild(dayEl);
+            });
+
+            // Get first day of month and days in month
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Empty slots for previous month
+            for (let i = 0; i < firstDay; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'calendar-day';
+                empty.style.opacity = '0.3';
+                grid.appendChild(empty);
+            }
+
+            // Days
+            let activeDaysCount = 0;
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                dayEl.innerHTML = `<span style="font-size: 0.8rem;">${i}</span>`;
+
+                // Check if today
+                const today = new Date();
+                if (today.getFullYear() === year && today.getMonth() === month && today.getDate() === i) {
+                    dayEl.classList.add('today');
+                }
+
+                // Check for data
+                if (state.today[dateKey]) {
+                    // Check if any task is completed
+                    const hasCompletedTask = Object.values(state.today[dateKey]).some(v => v);
+                    if (hasCompletedTask) {
+                        dayEl.classList.add('has-data');
+                        activeDaysCount++;
+
+                        // Show quick stats on hover (simple implementation)
+                        const completedCount = Object.values(state.today[dateKey]).filter(v => v).length;
+                        dayEl.title = `${completedCount} tasks completed`;
+                    }
+                }
+
+                grid.appendChild(dayEl);
+            }
+
+            // Update calendar stats
+            document.getElementById('totalActiveDays').textContent = Object.keys(state.today).length;
+            const consistency = Math.round((activeDaysCount / daysInMonth) * 100);
+            document.getElementById('consistencyScore').textContent = consistency + '%';
+        }
+
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendar();
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+
+</html>
